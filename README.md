@@ -9,40 +9,58 @@ Type safe request handlers for [Express]. TypeScript compatible.
 
 Below is small example that demonstrates request body validation using [io-ts] response construction using [express-result-types].
 
-[See a larger example](./src/example.ts).
+[See the full example](./src/example.ts).
 
 ``` ts
+const Query = t.interface({ age: NumberFromString });
+
+const Body = composeTypes(
+    JSONFromString,
+    t.interface({
+        name: t.string,
+    }),
+    'Body',
+);
+
 const requestHandler = wrap(req =>
-    req.body.validate(Body).fold(
-        validationErrors =>
-            BadRequest.apply(
-                new HttpEntity(JSON.stringify('Validation errors!'), 'application/json'),
-            ),
-        body =>
+    req.body
+        .validate(Body)
+        .chain(body => req.query.validate(Query).map(query => createTuple(body, query)))
+        .fold(validationErrorsToBadRequest, ([body, query]) =>
             Ok.apply(
                 new HttpEntity(
                     JSON.stringify({
-                        // Here the type checker knows the type of `body`, and that `body.name`
-                        // is type `string`.
+                        // Here the type checker knows the type of `body`:
+                        // - `body.name` is type `string`
+                        // - `body.age` is type `number`
                         name: body.name,
+                        age: query.age,
                     }),
                     'application/json',
                 ),
             ),
-    ),
+        ),
 );
 
 app.post('/', requestHandler);
 
-// ❯ curl --request POST --silent "localhost:8080/" | jq '.'
+// ❯ curl --request POST --silent --header 'Content-Type: application/json' \
+//     --data '{ "name": 1 }' "localhost:8080/" | jq '.'
 // [
-//   "Validation errors!"
+//   "Expecting string at name but instead got: 1."
 // ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
-//     --data '{ "name": "bob" }' "localhost:8080/" | jq '.'
+//     --data '{ "name": "bob" }' "localhost:8080/?age=foo" | jq '.'
+// [
+//   "Expecting NumberFromString at age but instead got: \"foo\"."
+// ]
+
+// ❯ curl --request POST --silent --header 'Content-Type: application/json' \
+//     --data '{ "name": "bob" }' "localhost:8080/?age=5" | jq '.'
 // {
-//   "name": "bob"
+//   "name": "bob",
+//   "age": 5
 // }
 ```
 

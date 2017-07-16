@@ -1,20 +1,12 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
-import { BadRequest, HttpEntity, Ok, Result } from 'express-result-types/target/result';
-import { applyResultToExpress } from 'express-result-types/target/wrap';
+import { HttpEntity, Ok } from 'express-result-types/target/result';
 import * as session from 'express-session';
-import * as either from 'fp-ts/lib/Either';
 import * as http from 'http';
 import * as t from 'io-ts';
 
-import { Either } from 'fp-ts/lib/Either';
-import {
-    composeTypes,
-    createTuple,
-    formatValidationErrors,
-    JSONFromString,
-    NumberFromString,
-} from './helpers/other';
+import { validationErrorsToBadRequest } from './helpers/example';
+import { composeTypes, createTuple, JSONFromString, NumberFromString } from './helpers/other';
 import { wrap } from './index';
 
 const app = express();
@@ -31,14 +23,6 @@ const Body = composeTypes(
     }),
     'Body',
 );
-
-const validationErrorsToBadRequest = (validationErrors: t.ValidationError[]): Result =>
-    BadRequest.apply(
-        new HttpEntity(
-            JSON.stringify(formatValidationErrors(validationErrors)),
-            'application/json',
-        ),
-    );
 
 const requestHandler = wrap(req =>
     req.body
@@ -86,9 +70,10 @@ httpServer.listen(8080, () => {
     onListen(httpServer);
 });
 
-// ❯ curl --request POST --silent "localhost:8080/" | jq '.'
+// ❯ curl --request POST --silent --header 'Content-Type: application/json' \
+//     --data '{ "name": 1 }' "localhost:8080/" | jq '.'
 // [
-//   "Expecting Body but instead got: {}."
+//   "Expecting string at name but instead got: 1."
 // ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
@@ -100,5 +85,6 @@ httpServer.listen(8080, () => {
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
 //     --data '{ "name": "bob" }' "localhost:8080/?age=5" | jq '.'
 // {
-//   "result": "name: bob, age: 5"
+//   "name": "bob",
+//   "age": 5
 // }
