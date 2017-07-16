@@ -2,12 +2,12 @@
 
 Type safe request handlers for [Express]. TypeScript compatible.
 
-- Validate Express requests (session, body, and query objects) using [io-ts].
+- Validate Express requests (body and query objects) using [io-ts].
 - Construct Express responses without mutation using [express-result-types].
 
 ## Example
 
-Below is small example that demonstrates request body validation using [io-ts] response construction using [express-result-types].
+Below is small example that demonstrates request body and query validation using [io-ts] and fully typed response construction using [express-result-types].
 
 [See the full example](./src/example.ts).
 
