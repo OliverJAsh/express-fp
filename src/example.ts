@@ -32,7 +32,7 @@ const Body = composeTypes(
     'Body',
 );
 
-const createValidationErrorsError = (validationErrors: t.ValidationError[]): Result =>
+const validationErrorsToBadRequest = (validationErrors: t.ValidationError[]): Result =>
     BadRequest.apply(
         new HttpEntity(
             JSON.stringify(formatValidationErrors(validationErrors)),
@@ -44,7 +44,7 @@ const requestHandler = wrap(req =>
     req.body
         .validate(Body)
         .chain(body => req.query.validate(Query).map(query => createTuple(body, query)))
-        .fold(createValidationErrorsError, ([body, query]) =>
+        .fold(validationErrorsToBadRequest, ([body, query]) =>
             Ok.apply(
                 new HttpEntity(
                     JSON.stringify({
