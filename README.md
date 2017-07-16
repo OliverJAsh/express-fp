@@ -5,7 +5,46 @@ Type safe request handlers for [Express]. TypeScript compatible.
 - Validate Express requests (session, body, and query objects) using [io-ts].
 - Construct Express responses without mutation using [express-result-types].
 
-[See the example](./src/example.ts).
+## Example
+
+Below is small example that demonstrates request body validation using [io-ts] response construction using [express-result-types].
+
+[See a larger example](./src/example.ts).
+
+``` ts
+const requestHandler = wrap(req =>
+    req.body.validate(Body).fold(
+        validationErrors =>
+            BadRequest.apply(
+                new HttpEntity(JSON.stringify('Validation errors!'), 'application/json'),
+            ),
+        body =>
+            Ok.apply(
+                new HttpEntity(
+                    JSON.stringify({
+                        // Here the type checker knows the type of `body`, and that `body.name`
+                        // is type `string`.
+                        name: body.name,
+                    }),
+                    'application/json',
+                ),
+            ),
+    ),
+);
+
+app.post('/', requestHandler);
+
+// ❯ curl --request POST --silent "localhost:8080/" | jq '.'
+// [
+//   "Validation errors!"
+// ]
+
+// ❯ curl --request POST --silent --header 'Content-Type: application/json' \
+//     --data '{ "name": "bob" }' "localhost:8080/" | jq '.'
+// {
+//   "name": "bob"
+// }
+```
 
 ## Installation
 
