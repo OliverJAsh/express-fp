@@ -48,7 +48,11 @@ const requestHandler = wrap(req =>
             Ok.apply(
                 new HttpEntity(
                     JSON.stringify({
-                        result: `name: ${body.name}, age: ${query.age}`,
+                        // Here the type checker knows the type of `body`:
+                        // - `body.name` is type `string`
+                        // - `body.age` is type `number`
+                        name: body.name,
+                        age: query.age,
                     }),
                     'application/json',
                 ),
