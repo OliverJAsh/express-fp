@@ -1,0 +1,36 @@
+{
+  "name": "express-fp",
+  "main": "./target/index.js",
+  "typings": "./target/index.d.ts",
+  "version": "0.0.0",
+  "scripts": {
+    "lint": "tslint --project tsconfig.json --type-check",
+    "compile": "tsc",
+    "start": "npm run compile && npm run lint && node ./target/example.js",
+    "cleanTarget": "rm -rf ./target/*",
+    "prepublishOnly": "npm run cleanTarget && npm run compile && npm run lint",
+    "format": "prettier --write --tab-width 4 --print-width 100 --single-quote --trailing-comma all 'src/**/*.ts'"
+  },
+  "files": [
+    "target"
+  ],
+  "dependencies": {
+    "body-parser": "1.17.2",
+    "express": "4.15.3",
+    "express-result-types": "0.0.2",
+    "express-session": "1.15.3",
+    "fp-ts": "0.4.0",
+    "io-ts": "0.6.0",
+    "io-ts-reporters": "0.0.14"
+  },
+  "devDependencies": {
+    "@types/body-parser": "1.16.4",
+    "@types/express": "4.0.36",
+    "@types/express-session": "1.15.1",
+    "@types/node": "8.0.13",
+    "prettier": "1.5.3",
+    "tslint": "5.5.0",
+    "tslint-language-service": "0.9.6",
+    "typescript": "2.4.1"
+  }
+}
