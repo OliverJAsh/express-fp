@@ -1,6 +1,6 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
-import { HttpEntity, Ok } from 'express-result-types/target/result';
+import { JsValue, jsValueWriteable, Ok } from 'express-result-types/target/result';
 import * as session from 'express-session';
 import * as http from 'http';
 import * as t from 'io-ts';
@@ -30,16 +30,14 @@ const requestHandler = wrap(req =>
         .chain(body => req.query.validate(Query).map(query => createTuple(body, query)))
         .fold(validationErrorsToBadRequest, ([body, query]) =>
             Ok.apply(
-                new HttpEntity(
-                    JSON.stringify({
-                        // Here the type checker knows the type of `body`:
-                        // - `body.name` is type `string`
-                        // - `body.age` is type `number`
-                        name: body.name,
-                        age: query.age,
-                    }),
-                    'application/json',
-                ),
+                new JsValue({
+                    // Here the type checker knows the type of `body`:
+                    // - `body.name` is type `string`
+                    // - `body.age` is type `number`
+                    name: body.name,
+                    age: query.age,
+                }),
+                jsValueWriteable,
             ),
         ),
 );
@@ -48,11 +46,8 @@ const sessionRequestHandler = wrap(req => {
     const maybeUserId = req.session.get('userId');
 
     return maybeUserId.fold(
-        () =>
-            Ok.apply(new HttpEntity(JSON.stringify({}), 'application/json')).withSession(
-                new Map([['userId', 'foo']]),
-            ),
-        userId => Ok.apply(new HttpEntity(JSON.stringify({ userId }), 'application/json')),
+        () => Ok.apply(new JsValue({}), jsValueWriteable).withSession(new Map([['userId', 'foo']])),
+        userId => Ok.apply(new JsValue({ userId }), jsValueWriteable),
     );
 });
 

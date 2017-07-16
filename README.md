@@ -28,16 +28,14 @@ const requestHandler = wrap(req =>
         .chain(body => req.query.validate(Query).map(query => createTuple(body, query)))
         .fold(validationErrorsToBadRequest, ([body, query]) =>
             Ok.apply(
-                new HttpEntity(
-                    JSON.stringify({
-                        // Here the type checker knows the type of `body`:
-                        // - `body.name` is type `string`
-                        // - `body.age` is type `number`
-                        name: body.name,
-                        age: query.age,
-                    }),
-                    'application/json',
-                ),
+                new JsValue({
+                    // Here the type checker knows the type of `body`:
+                    // - `body.name` is type `string`
+                    // - `body.age` is type `number`
+                    name: body.name,
+                    age: query.age,
+                }),
+                jsValueWriteable,
             ),
         ),
 );

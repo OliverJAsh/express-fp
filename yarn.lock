@@ -185,9 +185,9 @@ etag@~1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.0.tgz#6f631aef336d6c46362b51764044ce216be3c051"
 
-express-result-types@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/express-result-types/-/express-result-types-0.0.2.tgz#52ca121609ac1624985a289e89a960471d9197d5"
+express-result-types@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/express-result-types/-/express-result-types-0.0.3.tgz#58dde46eeec35ff6c0a1e16269f06d80ddd7bb78"
   dependencies:
     express "4.15.3"
     express-session "1.15.3"
