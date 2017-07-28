@@ -33,11 +33,7 @@
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.1.tgz#2cf42972d0931c1060c7d5fa6627fce6bd876f2f"
 
-"@types/node@*":
-  version "8.0.13"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.13.tgz#530f0f9254209b0335bf5cc6387822594ef47093"
-
-"@types/node@8.0.17":
+"@types/node@*", "@types/node@8.0.17":
   version "8.0.17"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.17.tgz#677bc8c118cfb76013febb62ede1f31d2c7222a1"
 
@@ -79,7 +75,7 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
-body-parser@1.17.2:
+body-parser@^1.17.2:
   version "1.17.2"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.17.2.tgz#f8892abc8f9e627d42aedafbca66bf5ab99104ee"
   dependencies:
@@ -159,9 +155,13 @@ debug@2.6.8:
   dependencies:
     ms "2.0.0"
 
-depd@1.1.0, depd@~1.1.0:
+depd@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.0.tgz#e1bd82c6aab6ced965b97b88b17ed3e528ca18c3"
+
+depd@~1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.1.tgz#5783b4e1c459f06fa5ca27f991f3d06e7a310359"
 
 destroy@~1.0.4:
   version "1.0.4"
@@ -195,7 +195,7 @@ etag@~1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.0.tgz#6f631aef336d6c46362b51764044ce216be3c051"
 
-express-result-types@0.0.3:
+express-result-types@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/express-result-types/-/express-result-types-0.0.3.tgz#58dde46eeec35ff6c0a1e16269f06d80ddd7bb78"
   dependencies:
@@ -217,7 +217,7 @@ express-session@1.15.3:
     uid-safe "~2.1.4"
     utils-merge "1.0.0"
 
-express-session@1.15.4:
+express-session@^1.15.4:
   version "1.15.4"
   resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.15.4.tgz#5e2cdcf6defe3c1eda4e980f13b986cc58cfb954"
   dependencies:
@@ -231,7 +231,7 @@ express-session@1.15.4:
     uid-safe "~2.1.4"
     utils-merge "1.0.0"
 
-express@4.15.3:
+express@4.15.3, express@^4.15.3:
   version "4.15.3"
   resolved "https://registry.yarnpkg.com/express/-/express-4.15.3.tgz#bab65d0f03aa80c358408972fc700f916944b662"
   dependencies:
@@ -280,13 +280,9 @@ forwarded@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.0.tgz#19ef9874c4ae1c297bcf078fde63a09b66a84363"
 
-fp-ts@0.4.3, fp-ts@^0.4.3:
+fp-ts@^0.4.0, fp-ts@^0.4.3:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-0.4.3.tgz#03877fb7e5aa3c04d0694e9371543e9dbfe3ef6f"
-
-fp-ts@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-0.4.0.tgz#5ee9ca4e9e4aa4ad7ac0ac596790c8ac0601757d"
 
 fresh@0.5.0:
   version "0.5.0"
@@ -341,22 +337,22 @@ inherits@2, inherits@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
 
-io-ts-reporters@0.0.15:
+io-ts-reporters@^0.0.15:
   version "0.0.15"
   resolved "https://registry.yarnpkg.com/io-ts-reporters/-/io-ts-reporters-0.0.15.tgz#5ca91e7282c3313d93ea595b1d2f6d4e38917c13"
   dependencies:
     fp-ts "^0.4.3"
     io-ts "^0.6.1"
 
-io-ts@0.6.1, io-ts@^0.6.1:
+io-ts@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-0.6.1.tgz#dcde35600bca783296554cc9041aa56f332ed33a"
   dependencies:
     fp-ts "^0.4.0"
 
-ipaddr.js@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.3.0.tgz#1e03a52fdad83a8bbb2b25cbf4998b4cffcd3dec"
+ipaddr.js@1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.4.0.tgz#296aca878a821816e5b85d0a285a99bcff4582f0"
 
 js-tokens@^3.0.0:
   version "3.0.2"
@@ -374,15 +370,15 @@ methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
 
-mime-db@~1.27.0:
-  version "1.27.0"
-  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.27.0.tgz#820f572296bbd20ec25ed55e5b5de869e5436eb1"
+mime-db@~1.29.0:
+  version "1.29.0"
+  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.29.0.tgz#48d26d235589651704ac5916ca06001914266878"
 
 mime-types@~2.1.11, mime-types@~2.1.15:
-  version "2.1.15"
-  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.15.tgz#a4ebf5064094569237b8cf70046776d09fc92aed"
+  version "2.1.16"
+  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.16.tgz#2b858a52e5ecd516db897ac2be87487830698e23"
   dependencies:
-    mime-db "~1.27.0"
+    mime-db "~1.29.0"
 
 mime@1.3.4:
   version "1.3.4"
@@ -439,11 +435,11 @@ prettier@1.5.3:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.5.3.tgz#59dadc683345ec6b88f88b94ed4ae7e1da394bfe"
 
 proxy-addr@~1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/proxy-addr/-/proxy-addr-1.1.4.tgz#27e545f6960a44a627d9b44467e35c1b6b4ce2f3"
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/proxy-addr/-/proxy-addr-1.1.5.tgz#71c0ee3b102de3f202f3b64f608d173fcba1a918"
   dependencies:
     forwarded "~0.1.0"
-    ipaddr.js "1.3.0"
+    ipaddr.js "1.4.0"
 
 qs@6.4.0:
   version "6.4.0"
@@ -466,14 +462,14 @@ raw-body@~2.2.0:
     unpipe "1.0.0"
 
 resolve@^1.3.2:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.3.3.tgz#655907c3469a8680dc2de3a275a8fdd69691f0e5"
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.4.0.tgz#a75be01c53da25d934a98ebd0e4c4a7312f92a86"
   dependencies:
     path-parse "^1.0.5"
 
 semver@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-5.3.0.tgz#9b2ce5d3de02d17c6012ad326aa6b4d0cf54f94f"
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-5.4.1.tgz#e059c09d8571f0540823733433505d3a2f00b18e"
 
 send@0.15.3:
   version "0.15.3"
@@ -544,8 +540,8 @@ tslint@5.5.0:
     tsutils "^2.5.1"
 
 tsutils@^2.5.1:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.7.1.tgz#411a0e9466525a2b2869260a55620d7292155e24"
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.8.0.tgz#0160173729b3bf138628dd14a1537e00851d814a"
   dependencies:
     tslib "^1.7.1"
 
