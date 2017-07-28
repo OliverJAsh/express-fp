@@ -11,6 +11,7 @@ import { SafeMutableMap } from './helpers/other';
 
 export class SafeRequest {
     constructor(private req: express.Request) {}
+    ip = this.req.ip;
     body = {
         validate: <Type>(type: t.Type<Type>): Either<t.ValidationError[], Type> =>
             t.validate(this.req.body, type),
