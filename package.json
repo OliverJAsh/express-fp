@@ -19,9 +19,9 @@
     "express": "^4.15.3",
     "express-result-types": "^0.0.3",
     "express-session": "^1.15.4",
-    "fp-ts": "^0.5.2",
-    "io-ts": "^0.7.0",
-    "io-ts-reporters": "^0.0.16"
+    "fp-ts": "^0.6.2",
+    "io-ts": "^0.8.2",
+    "io-ts-reporters": "^0.0.17"
   },
   "devDependencies": {
     "@types/body-parser": "1.16.4",
@@ -31,6 +31,6 @@
     "prettier": "1.5.3",
     "tslint": "5.5.0",
     "tslint-language-service": "0.9.6",
-    "typescript": "2.4.2"
+    "typescript": "^2.6.1"
   }
 }
