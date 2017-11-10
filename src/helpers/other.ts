@@ -1,9 +1,10 @@
 import * as array from 'fp-ts/lib/Array';
 import * as either from 'fp-ts/lib/Either';
 import * as option from 'fp-ts/lib/Option';
-import { Option } from 'fp-ts/lib/Option';
 import * as t from 'io-ts';
 import { formatValidationError } from 'io-ts-reporters/target/src';
+
+import Option = option.Option;
 
 const parseNumber = (s: string): Option<number> => {
     const n = parseFloat(s);
