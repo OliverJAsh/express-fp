@@ -4,7 +4,7 @@
   "typings": "./target/index.d.ts",
   "version": "0.0.7",
   "scripts": {
-    "lint": "tslint --project tsconfig.json --type-check",
+    "lint": "tslint --project tsconfig.json",
     "compile": "tsc",
     "start": "npm run compile && npm run lint && node ./target/example.js",
     "cleanTarget": "rm -rf ./target/*",
