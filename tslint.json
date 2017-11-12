@@ -55,7 +55,7 @@
         "object-literal-shorthand": true,
         "prefer-switch": true,
         "prefer-template": true,
-        "quotemark": [true, "single"],
+        "quotemark": [true, "single", "avoid-escape"],
         "variable-name": [
             true,
             "ban-keywords",
