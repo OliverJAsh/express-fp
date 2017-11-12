@@ -12,6 +12,7 @@ import { SafeMutableMap } from './helpers/other';
 export class JsValue {
     constructor(private value: {}) {}
 
+    // https://www.playframework.com/documentation/2.6.x/ScalaJson#Using-validation
     validate<Type>(type: t.Type<Type>): Either<t.ValidationError[], Type> {
         return t.validate(this.value, type);
     }
