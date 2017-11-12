@@ -37,9 +37,12 @@ const requestHandler = wrap(req => {
                         maybeValidatedAge.fold(validationErrorsToBadRequest('age'), age =>
                             Ok.apply(
                                 new JsValue({
-                                    // Here the type checker knows the type of `body`:
+                                    // We defined the shape of the request body and the request
+                                    // query parameter 'age' for validation purposes, but it also
+                                    // gives us static types! For example, here the type checker
+                                    // knows the types:
                                     // - `body.name` is type `string`
-                                    // - `body.age` is type `number`
+                                    // - `age` is type `number`
                                     name: body.name,
                                     age,
                                 }),
