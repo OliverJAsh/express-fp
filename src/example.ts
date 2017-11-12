@@ -11,7 +11,7 @@ import { wrap } from './index';
 
 const app = express();
 app.use(session({ secret: 'foo' }));
-// We parse JSON using io-ts.
+// Don't parse body using middleware. Body parsing is instead handled in the request handler.
 app.use(bodyParser.text({ type: 'application/json' }));
 
 const Body = t.interface({
