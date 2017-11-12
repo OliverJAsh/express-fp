@@ -76,7 +76,7 @@ export class SafeRequest {
         // We presume the session was defined using `Result.withSession`.
         const session = this.req.session as Express.Session & ExpressRequestSession;
 
-        return new SafeMutableMap(Object.entries(session));
+        return new SafeMutableMap(Object.entries(session.data));
     })();
 }
 export type SafeRequestHandler = (req: SafeRequest) => Result;
