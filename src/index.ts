@@ -73,10 +73,15 @@ export class SafeRequest {
     })();
 
     session = (() => {
-        // We presume the session was defined using `Result.withSession`.
-        const session = this.req.session as Express.Session & ExpressRequestSession;
+        const maybeSessionData: ExpressRequestSession['data'] | undefined =
+            this.req.session !== undefined
+                ? // We presume the session was defined using `Result.withSession`.
+                  this.req.session.data as ExpressRequestSession['data']
+                : undefined;
 
-        return new SafeMutableMap(Object.entries(session.data));
+        return new SafeMutableMap(
+            Object.entries(maybeSessionData !== undefined ? maybeSessionData : {}),
+        );
     })();
 }
 export type SafeRequestHandler = (req: SafeRequest) => Result;
