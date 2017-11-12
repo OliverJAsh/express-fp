@@ -3,5 +3,14 @@ import * as t from 'io-ts';
 
 import { formatValidationErrors } from './other';
 
-export const validationErrorsToBadRequest = (validationErrors: t.ValidationError[]): Result =>
-    BadRequest.apply(new JsValue(formatValidationErrors(validationErrors)), jsValueWriteable);
+export const validationErrorsToBadRequest = (context: string) => (
+    validationErrors: t.ValidationError[],
+): Result =>
+    BadRequest.apply(
+        new JsValue([
+            `Validation errors for ${context}: ${formatValidationErrors(validationErrors).join(
+                ', ',
+            )}`,
+        ]),
+        jsValueWriteable,
+    );
