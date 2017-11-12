@@ -5,12 +5,6 @@ import { formatValidationError } from 'io-ts-reporters/target/src';
 
 import Option = option.Option;
 
-const parseNumber = (s: string): Option<number> => {
-    const n = parseFloat(s);
-    return isNaN(n) ? option.zero() : option.some(n);
-};
-export const NumberFromString = t.prism(t.string, parseNumber, 'NumberFromString');
-
 export const formatValidationErrors = (validationErrors: t.ValidationError[]) =>
     array.catOptions(validationErrors.map(formatValidationError));
 

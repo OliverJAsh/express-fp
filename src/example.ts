@@ -5,8 +5,7 @@ import * as session from 'express-session';
 import * as http from 'http';
 import * as t from 'io-ts';
 
-import { validationErrorsToBadRequest } from './helpers/example';
-import { NumberFromString } from './helpers/other';
+import { NumberFromString, validationErrorsToBadRequest } from './helpers/example';
 import { wrap } from './index';
 
 const app = express();
