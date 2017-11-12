@@ -12,8 +12,9 @@ import { SafeMutableMap } from './helpers/other';
 export class JsValue {
     constructor(private value: {}) {}
 
-    validate = <Type>(type: t.Type<Type>): Either<t.ValidationError[], Type> =>
-        t.validate(this.value, type);
+    validate<Type>(type: t.Type<Type>): Either<t.ValidationError[], Type> {
+        return t.validate(this.value, type);
+    }
 }
 
 enum Header {
