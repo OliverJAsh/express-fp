@@ -13,45 +13,28 @@ app.use(session({ secret: 'foo' }));
 // Don't parse body using middleware. Body parsing is instead handled in the request handler.
 app.use(bodyParser.text({ type: 'application/json' }));
 
-const Body = t.interface({
-    name: t.string,
+const QueryParams = t.interface({
+    age: NumberFromString,
+    gender: t.union([t.literal('male'), t.literal('female')]),
 });
 
 const requestHandler = wrap(req => {
-    const jsonBody = req.body.asJson();
+    const maybeQueryParams = req.query
+        .get('age')
+        .chain(age => req.query.get('gender').map(gender => ({ age, gender })));
 
-    return jsonBody.fold(
-        error => BadRequest.apply(new JsValue([error]), jsValueWriteable),
-        jsValue =>
-            req.query.get('age').fold(
-                () =>
-                    BadRequest.apply(
-                        new JsValue(["Expecting query parameter 'age' but instead got none."]),
-                        jsValueWriteable,
-                    ),
-                ageString => {
-                    const maybeValidatedBody = jsValue.validate(Body);
-                    const maybeValidatedAge = t.validate(ageString, NumberFromString);
-
-                    return maybeValidatedBody.fold(validationErrorsToBadRequest('body'), body =>
-                        maybeValidatedAge.fold(validationErrorsToBadRequest('age'), age =>
-                            Ok.apply(
-                                new JsValue({
-                                    // We defined the shape of the request body and the request
-                                    // query parameter 'age' for validation purposes, but it also
-                                    // gives us static types! For example, here the type checker
-                                    // knows the types:
-                                    // - `body.name` is type `string`
-                                    // - `age` is type `number`
-                                    name: body.name,
-                                    age,
-                                }),
-                                jsValueWriteable,
-                            ),
-                        ),
-                    );
-                },
+    return maybeQueryParams.fold(
+        () =>
+            BadRequest.apply(
+                new JsValue(["Expecting query parameters 'age' and 'gender'."]),
+                jsValueWriteable,
             ),
+        queryParams =>
+            t
+                .validate(queryParams, QueryParams)
+                .fold(validationErrorsToBadRequest('query params'), validatedQueryParams =>
+                    Ok.apply(new JsValue(validatedQueryParams), jsValueWriteable),
+                ),
     );
 });
 
