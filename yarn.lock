@@ -305,8 +305,8 @@ forwarded@~0.1.0:
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.0.tgz#19ef9874c4ae1c297bcf078fde63a09b66a84363"
 
 fp-ts@^0.6.0, fp-ts@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-0.6.2.tgz#2a0ca882af217c3e8f1bc69f6abda3a017233a72"
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-0.6.4.tgz#830cc9cc1b3f67341a2a6cc18fd00a942b507cc4"
 
 fresh@0.5.0:
   version "0.5.0"

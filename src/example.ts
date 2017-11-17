@@ -8,6 +8,9 @@ import {
     Result,
 } from 'express-result-types/target/result';
 import * as session from 'express-session';
+import * as apply from 'fp-ts/lib/Apply';
+import * as array from 'fp-ts/lib/Array';
+import * as validation from 'fp-ts/lib/Validation';
 import * as http from 'http';
 import * as t from 'io-ts';
 
@@ -23,10 +26,14 @@ app.use(bodyParser.text({ type: 'application/json' }));
 const Body = t.interface({
     name: t.string,
 });
+type BodyT = t.TypeOf<typeof Body>;
 
 const Query = t.interface({
     age: NumberFromString,
 });
+type QueryT = t.TypeOf<typeof Query>;
+
+const validationFromEitherArrayString = validation.fromEither(array.getSemigroup<string>());
 
 const requestHandler = wrap(req => {
     const jsonBody = req.body.asJson();
@@ -38,28 +45,32 @@ const requestHandler = wrap(req => {
             },
             Query,
         )
-        .mapLeft(formatValidationErrors('query'));
+        .mapLeft(formatValidationErrors('query'))
+        .mapLeft(error => [error]);
 
-    const maybeBody = jsonBody.chain(jsValue =>
-        jsValue.validate(Body).mapLeft(formatValidationErrors('body')),
-    );
+    const maybeBody = jsonBody
+        .chain(jsValue => jsValue.validate(Body).mapLeft(formatValidationErrors('body')))
+        .mapLeft(error => [error]);
 
-    return maybeQuery
-        .chain(query => maybeBody.map(body => ({ query, body })))
-        .map(({ query, body }) =>
-            Ok.apply(
-                new JsValue({
-                    // We defined the shape of the request body and the request query parameter
-                    // 'age' for validation purposes, but it also gives us static types! For
-                    // example, here the type checker knows the types:
-                    // - `body.name` is type `string`
-                    // - `age` is type `number`
-                    name: body.name,
-                    age: query.age,
-                }),
-                jsValueWriteable,
-            ),
-        )
+    const getResult = (query: QueryT) => (body: BodyT) =>
+        Ok.apply(
+            new JsValue({
+                // We defined the shape of the request body and the request query parameter 'age'
+                // for validation purposes, but it also gives us static types! For example, here the
+                // type checker knows the types:
+                // - `body.name` is type `string`
+                // - `age` is type `number`
+                name: body.name,
+                age: query.age,
+            }),
+            jsValueWriteable,
+        );
+
+    // prettier-ignore
+    return apply.liftA2(validation)(getResult)
+        (validationFromEitherArrayString(maybeQuery))
+        (validationFromEitherArrayString(maybeBody))
+        .toEither()
         .getOrElse(error => BadRequest.apply(new JsValue(error), jsValueWriteable));
 });
 
@@ -91,24 +102,23 @@ httpServer.listen(8080, () => {
 });
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
-//     --data '{ "name": "bob" }' "localhost:8080/" | jq '.'
-// "Validation errors for query: Expecting NumberFromString at age but instead got: null."
-
-// ❯ curl --request POST --silent --header 'Content-Type: application/json' \
-//     --data '{ "name": "bob" }' "localhost:8080/?age=foo" | jq '.'
-// "Validation errors for query: Expecting NumberFromString at age but instead got: \"foo\"."
+//     --data '{ "name": 1 }' "localhost:8080/" | jq '.'
+// [
+//   "Validation errors for body: Expecting string at name but instead got: 1.",
+//   "Validation errors for query: Expecting NumberFromString at age but instead got: null."
+// ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: invalid' \
 //     --data '{ "name": "bob" }' "localhost:8080/?age=5" | jq '.'
-// "Expecting request header 'Content-Type' to equal 'application/json', but instead got 'invalid'."
+// [
+//   "Expecting request header 'Content-Type' to equal 'application/json', but instead got 'invalid'."
+// ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
 //     --data 'invalid' "localhost:8080/?age=5" | jq '.'
-// "JSON parsing error: Unexpected token i in JSON at position 0"
-
-// ❯ curl --request POST --silent --header 'Content-Type: application/json' \
-//     --data '{ "name": 1 }' "localhost:8080/?age=5" | jq '.'
-// "Validation errors for body: Expecting string at name but instead got: 1."
+// [
+//   "JSON parsing error: Unexpected token i in JSON at position 0"
+// ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
 //     --data '{ "name": "bob" }' "localhost:8080/?age=5" | jq '.'
