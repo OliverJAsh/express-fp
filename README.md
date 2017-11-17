@@ -63,7 +63,7 @@ app.post('/', requestHandler);
 // ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
-// --data '{ "name": "bob" }' "localhost:8080/?age=foo" | jq '.'
+//     --data '{ "name": "bob" }' "localhost:8080/?age=foo" | jq '.'
 // [
 //   "Validation errors for query: Expecting NumberFromString at age but instead got: \"foo\"."
 // ]
