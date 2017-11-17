@@ -62,6 +62,12 @@ app.post('/', requestHandler);
 //   "Validation errors for query: Expecting NumberFromString at age but instead got: null."
 // ]
 
+// ❯ curl --request POST --silent --header 'Content-Type: application/json' \
+// --data '{ "name": "bob" }' "localhost:8080/?age=foo" | jq '.'
+// [
+//   "Validation errors for query: Expecting NumberFromString at age but instead got: \"foo\"."
+// ]
+
 // ❯ curl --request POST --silent --header 'Content-Type: invalid' \
 //     --data '{ "name": 1 }' "localhost:8080/?age=5" | jq '.'
 // [
@@ -75,9 +81,9 @@ app.post('/', requestHandler);
 // ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
-//     --data '{ "name": "bob" }' "localhost:8080/?age=foo" | jq '.'
+//     --data '{ "name": 1 }' "localhost:8080/?age=5" | jq '.'
 // [
-//   "Validation errors for age: Expecting NumberFromString at age but instead got: \"foo\"."
+//   "Validation errors for body: Expecting string at name but instead got: 1."
 // ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
