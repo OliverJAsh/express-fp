@@ -30,11 +30,11 @@ const requestHandler = wrap(req => {
             },
             Query,
         )
-        .mapLeft(validationErrorsToBadRequest('query'));
+        .mapLeft(formatValidationErrors('query'));
 
-    const maybeBody = jsonBody
-        .mapLeft(error => BadRequest.apply(new JsValue([error]), jsValueWriteable))
-        .chain(jsValue => jsValue.validate(Body).mapLeft(validationErrorsToBadRequest('body')));
+    const maybeBody = jsonBody.chain(jsValue =>
+        jsValue.validate(Body).mapLeft(formatValidationErrors('body')),
+    );
 
     return maybeQuery
         .chain(query => maybeBody.map(body => ({ query, body })))
@@ -51,7 +51,8 @@ const requestHandler = wrap(req => {
                 }),
                 jsValueWriteable,
             ),
-        ).value;
+        )
+        .getOrElse(error => BadRequest.apply(new JsValue([error]), jsValueWriteable));
 });
 
 app.post('/', requestHandler);

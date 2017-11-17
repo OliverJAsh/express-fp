@@ -5,8 +5,12 @@ import { formatValidationError } from 'io-ts-reporters/target/src';
 
 import Option = option.Option;
 
-export const formatValidationErrors = (validationErrors: t.ValidationError[]) =>
+const formatValidationErrorAll = (validationErrors: t.ValidationError[]) =>
     array.catOptions(validationErrors.map(formatValidationError));
+
+export const formatValidationErrors = (context: string) => (
+    validationErrors: t.ValidationError[],
+) => `Validation errors for ${context}: ${formatValidationErrorAll(validationErrors).join(', ')}`;
 
 export class SafeMutableMap<K, V> {
     map: Map<K, V>;
