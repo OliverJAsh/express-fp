@@ -8,7 +8,6 @@ import {
     Result,
 } from 'express-result-types/target/result';
 import * as session from 'express-session';
-import * as either from 'fp-ts/lib/Either';
 import * as http from 'http';
 import * as t from 'io-ts';
 
@@ -24,32 +23,29 @@ const Body = t.interface({
     name: t.string,
 });
 
+const Query = t.interface({
+    age: NumberFromString,
+});
+
 const requestHandler = wrap(req => {
     const jsonBody = req.body.asJson();
 
-    const maybeAge = req.query
-        .get('age')
-        .fold(
-            () =>
-                either.left(
-                    BadRequest.apply(
-                        new JsValue(["Expecting query parameter 'age' but instead got none."]),
-                        jsValueWriteable,
-                    ),
-                ),
-            ageString => either.right(ageString),
+    const maybeQuery = t
+        .validate(
+            {
+                age: req.query.get('age').toNullable(),
+            },
+            Query,
         )
-        .chain(ageString =>
-            t.validate(ageString, NumberFromString).mapLeft(validationErrorsToBadRequest('age')),
-        );
+        .mapLeft(validationErrorsToBadRequest('query'));
 
     const maybeBody = jsonBody
         .mapLeft(error => BadRequest.apply(new JsValue([error]), jsValueWriteable))
         .chain(jsValue => jsValue.validate(Body).mapLeft(validationErrorsToBadRequest('body')));
 
-    return maybeAge
-        .chain(age => maybeBody.map(body => ({ age, body })))
-        .map(({ age, body }) =>
+    return maybeQuery
+        .chain(query => maybeBody.map(body => ({ query, body })))
+        .map(({ query, body }) =>
             Ok.apply(
                 new JsValue({
                     // We defined the shape of the request body and the request query parameter
@@ -58,7 +54,7 @@ const requestHandler = wrap(req => {
                     // - `body.name` is type `string`
                     // - `age` is type `number`
                     name: body.name,
-                    age,
+                    age: query.age,
                 }),
                 jsValueWriteable,
             ),
@@ -96,7 +92,7 @@ httpServer.listen(8080, () => {
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
 //     --data '{ "name": 1 }' "localhost:8080/" | jq '.'
 // [
-//   "Expecting query parameter 'age', but instead got none."
+//   "Validation errors for query: Expecting NumberFromString at age but instead got: null."
 // ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: invalid' \
@@ -114,7 +110,7 @@ httpServer.listen(8080, () => {
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
 //     --data '{ "name": "bob" }' "localhost:8080/?age=foo" | jq '.'
 // [
-//   "Validation errors for age: Expecting NumberFromString but instead got: \"foo\"."
+//   "Validation errors for age: Expecting NumberFromString at age but instead got: \"foo\"."
 // ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
