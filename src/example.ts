@@ -60,7 +60,7 @@ const requestHandler = wrap(req => {
                 jsValueWriteable,
             ),
         )
-        .getOrElse(error => BadRequest.apply(new JsValue([error]), jsValueWriteable));
+        .getOrElse(error => BadRequest.apply(new JsValue(error), jsValueWriteable));
 });
 
 const sessionRequestHandler = wrap(req => {
@@ -92,33 +92,23 @@ httpServer.listen(8080, () => {
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
 //     --data '{ "name": "bob" }' "localhost:8080/" | jq '.'
-// [
-//   "Validation errors for query: Expecting NumberFromString at age but instead got: null."
-// ]
+// "Validation errors for query: Expecting NumberFromString at age but instead got: null."
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
 //     --data '{ "name": "bob" }' "localhost:8080/?age=foo" | jq '.'
-// [
-//   "Validation errors for query: Expecting NumberFromString at age but instead got: \"foo\"."
-// ]
+// "Validation errors for query: Expecting NumberFromString at age but instead got: \"foo\"."
 
 // ❯ curl --request POST --silent --header 'Content-Type: invalid' \
 //     --data '{ "name": "bob" }' "localhost:8080/?age=5" | jq '.'
-// [
-//   "Expecting request header 'Content-Type' to equal 'application/json', but instead got 'invalid'."
-// ]
+// "Expecting request header 'Content-Type' to equal 'application/json', but instead got 'invalid'."
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
 //     --data 'invalid' "localhost:8080/?age=5" | jq '.'
-// [
-//   "JSON parsing error: Unexpected token i in JSON at position 0"
-// ]
+// "JSON parsing error: Unexpected token i in JSON at position 0"
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
 //     --data '{ "name": 1 }' "localhost:8080/?age=5" | jq '.'
-// [
-//   "Validation errors for body: Expecting string at name but instead got: 1."
-// ]
+// "Validation errors for body: Expecting string at name but instead got: 1."
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
 //     --data '{ "name": "bob" }' "localhost:8080/?age=5" | jq '.'
