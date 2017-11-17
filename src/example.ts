@@ -58,8 +58,7 @@ const requestHandler = wrap(req => {
                 }),
                 jsValueWriteable,
             ),
-        )
-        .fold(x => x, x => x);
+        ).value;
 });
 
 const sessionRequestHandler = wrap(req => {
