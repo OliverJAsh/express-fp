@@ -57,7 +57,7 @@ const requestHandler = wrap(req => {
 app.post('/', requestHandler);
 
 // ❯ curl --request POST --silent --header 'Content-Type: application/json' \
-//     --data '{ "name": 1 }' "localhost:8080/" | jq '.'
+//     --data '{ "name": "bob" }' "localhost:8080/" | jq '.'
 // [
 //   "Validation errors for query: Expecting NumberFromString at age but instead got: null."
 // ]
@@ -69,7 +69,7 @@ app.post('/', requestHandler);
 // ]
 
 // ❯ curl --request POST --silent --header 'Content-Type: invalid' \
-//     --data '{ "name": 1 }' "localhost:8080/?age=5" | jq '.'
+//     --data '{ "name": "bob" }' "localhost:8080/?age=5" | jq '.'
 // [
 //   "Expecting request header 'Content-Type' to equal 'application/json', but instead got 'invalid'."
 // ]
