@@ -81,11 +81,7 @@ const onListen = (server: http.Server) => {
     console.log(`Server running on port ${port}`);
 };
 
-const httpServer = http.createServer(
-    // TODO: Investigate bug in Express/Node typings
-    // @ts-ignore
-    app,
-);
+const httpServer = http.createServer(app);
 httpServer.listen(8080, () => {
     onListen(httpServer);
 });
