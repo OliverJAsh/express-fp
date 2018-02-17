@@ -354,9 +354,9 @@ forwarded@~0.1.0, forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
 
-fp-ts@^0.6.0, fp-ts@^0.6.2:
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-0.6.4.tgz#830cc9cc1b3f67341a2a6cc18fd00a942b507cc4"
+fp-ts@^1.0.0, fp-ts@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-1.0.1.tgz#4d0fc9ab24c6c6cd0381e5eefc684a6eb8321b41"
 
 fresh@0.5.0:
   version "0.5.0"
@@ -419,18 +419,18 @@ inherits@2, inherits@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
 
-io-ts-reporters@^0.0.17:
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/io-ts-reporters/-/io-ts-reporters-0.0.17.tgz#ce9ce5c939a32bd5479aa71def1330832593e57f"
+io-ts-reporters@^0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/io-ts-reporters/-/io-ts-reporters-0.0.20.tgz#2b8cbb6a2bc4562dae6917a3a413fa2c9851a644"
   dependencies:
-    fp-ts "^0.6.2"
-    io-ts "^0.8.2"
+    fp-ts "^1.0.1"
+    io-ts "^1.0.2"
 
-io-ts@^0.8.2:
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-0.8.2.tgz#cf87ca011f384c662d7ef1bb9657c069a22de7d4"
+io-ts@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-1.0.2.tgz#3e463ba2bfd2daaa4bce615a3fa99b6d8ba7d5ff"
   dependencies:
-    fp-ts "^0.6.0"
+    fp-ts "^1.0.0"
 
 ipaddr.js@1.4.0:
   version "1.4.0"

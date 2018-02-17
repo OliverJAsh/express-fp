@@ -19,9 +19,9 @@
     "express": "^4.15.3",
     "express-result-types": "^0.0.4",
     "express-session": "^1.15.4",
-    "fp-ts": "^0.6.2",
-    "io-ts": "^0.8.2",
-    "io-ts-reporters": "^0.0.17"
+    "fp-ts": "^1.0.1",
+    "io-ts": "^1.0.2",
+    "io-ts-reporters": "^0.0.20"
   },
   "devDependencies": {
     "@types/body-parser": "^1.16.4",

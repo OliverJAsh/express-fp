@@ -23,14 +23,9 @@ const Query = t.interface({
 const requestHandler = wrap(req => {
     const jsonBody = req.body.asJson();
 
-    const maybeQuery = t
-        .validate(
-            {
-                age: req.query.get('age').toNullable(),
-            },
-            Query,
-        )
-        .mapLeft(formatValidationErrors('query'));
+    const maybeQuery = Query.decode({
+        age: req.query.get('age').toNullable(),
+    }).mapLeft(formatValidationErrors('query'));
 
     const maybeBody = jsonBody.chain(jsValue =>
         jsValue.validate(Body).mapLeft(formatValidationErrors('body')),
@@ -52,7 +47,7 @@ const requestHandler = wrap(req => {
                 jsValueWriteable,
             ),
         )
-        .getOrElse(error => BadRequest.apply(new JsValue(error), jsValueWriteable));
+        .getOrElseL(error => BadRequest.apply(new JsValue(error), jsValueWriteable));
 });
 
 app.post('/', requestHandler);

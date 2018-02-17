@@ -14,7 +14,7 @@ export class JsValue {
 
     // https://www.playframework.com/documentation/2.6.x/ScalaJson#Using-validation
     validate<Type>(type: t.Type<Type>): Either<t.ValidationError[], Type> {
-        return t.validate(this.value, type);
+        return type.decode(this.value);
     }
 }
 
