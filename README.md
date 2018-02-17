@@ -22,18 +22,12 @@ const Query = t.interface({
 });
 type QueryT = t.TypeOf<typeof Query>;
 
-const validationFromEitherArrayString = validation.fromEither(array.getSemigroup<string>());
-
 const requestHandler = wrap(req => {
     const jsonBody = req.body.asJson();
 
-    const maybeQuery = t
-        .validate(
-            {
-                age: req.query.get('age').toNullable(),
-            },
-            Query,
-        )
+    const maybeQuery = Query.decode({
+        age: req.query.get('age').toNullable(),
+    })
         .mapLeft(formatValidationErrors('query'))
         .mapLeft(error => [error]);
 
@@ -55,11 +49,11 @@ const requestHandler = wrap(req => {
             jsValueWriteable,
         );
 
-    return apply.liftA2(validation)(getResult)
-        (validationFromEitherArrayString(maybeQuery))
-        (validationFromEitherArrayString(maybeBody))
-        .toEither()
-        .getOrElse(error => BadRequest.apply(new JsValue(error), jsValueWriteable));
+    // prettier-ignore
+    return apply.liftA2(validation.getApplicative(getArraySemigroup<string>()))(getResult)
+        (validation.fromEither(maybeQuery))
+        (validation.fromEither(maybeBody))
+        .getOrElseL(error => BadRequest.apply(new JsValue(error), jsValueWriteable));
 });
 
 app.post('/', requestHandler);
