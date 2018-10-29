@@ -39,11 +39,11 @@ export class AnyContent {
 
     asJson(): Either<string, JsValue> {
         return either.tryCatch(() => contentType.parse(this.req))
-        .mapLeft(error => `Cannot parse Content-Type header: ${error.message}`)
+        .mapLeft(error => `Cannot parse ${Header.ContentType} header: ${error.message}`)
         .chain(parsed =>
           parsed.type !== ContentType.ApplicationJson
               ? either.left(
-                `Expecting request header '${Header.ContentType}' to equal '${ContentType.ApplicationJson}' but instead got '${ct}'.`,
+                `Expecting request header '${Header.ContentType}' to have MIME type '${ContentType.ApplicationJson}' but got '${parsed.type}'.`,
               )
               : either.right(contentType)
         )
