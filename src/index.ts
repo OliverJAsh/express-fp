@@ -1,3 +1,4 @@
+import * as contentType from 'content-type'
 import * as express from 'express';
 import { Result } from 'express-result-types/target/result';
 import { applyResultToExpress, ExpressRequestSession } from 'express-result-types/target/wrap';
@@ -37,22 +38,25 @@ export class AnyContent {
     }
 
     asJson(): Either<string, JsValue> {
-        const contentType = this.req.get(Header.ContentType);
-        if (contentType !== ContentType.ApplicationJson) {
-            return either.left(
-                `Expecting request header '${Header.ContentType}' to equal '${ContentType.ApplicationJson}' but instead got '${contentType}'.`,
-            );
-        } else {
-            return either
-                .tryCatch((): {} =>
-                    JSON.parse(
-                        // TODO: How to enforce string? Don't use body parser middleware?
-                        this.req.body,
-                    ),
+        return either.tryCatch(() => contentType.parse(this.req))
+        .mapLeft(error => `Cannot parse ${Header.ContentType} header: ${error.message}`)
+        .chain(parsed =>
+          parsed.type !== ContentType.ApplicationJson
+              ? either.left(
+                `Expecting request header '${Header.ContentType}' to have MIME type '${ContentType.ApplicationJson}' but got '${parsed.type}'.`,
+              )
+              : either.right(contentType)
+        )
+        .chain(() =>
+            either.tryCatch((): {} =>
+                JSON.parse(
+                    // TODO: How to enforce string? Don't use body parser middleware?
+                    this.req.body,
                 )
-                .map(json => new JsValue(json))
-                .mapLeft(error => `JSON parsing error: ${error.message}`);
-        }
+            )
+            .map(json => new JsValue(json))
+            .mapLeft(error => `JSON parsing error: ${error.message}`)
+        )
     }
 }
 
